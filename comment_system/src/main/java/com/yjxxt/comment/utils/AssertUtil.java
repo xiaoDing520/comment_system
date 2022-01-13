@@ -1,0 +1,14 @@
+package com.yjxxt.comment.utils;
+
+import com.yjxxt.comment.exceptions.ParamsException;
+
+public class AssertUtil {
+
+
+    public  static void isTrue(Boolean flag,String msg){
+        if(flag){
+            throw  new ParamsException(msg);
+        }
+    }
+
+}

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yjxxt.comment.mapper.RoleMoudleMapper" >
+  <resultMap id="BaseResultMap" type="com.yjxxt.comment.bean.RoleMoudle" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="moudle_id" property="moudleId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, role_id, moudle_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_role_moudle
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_role_moudle
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yjxxt.comment.bean.RoleMoudle" >
+    insert into t_role_moudle (id, role_id, moudle_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{moudleId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yjxxt.comment.bean.RoleMoudle" >
+    insert into t_role_moudle
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="moudleId != null" >
+        moudle_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="moudleId != null" >
+        #{moudleId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yjxxt.comment.bean.RoleMoudle" >
+    update t_role_moudle
+    <set >
+      <if test="roleId != null" >
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="moudleId != null" >
+        moudle_id = #{moudleId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yjxxt.comment.bean.RoleMoudle" >
+    update t_role_moudle
+    set role_id = #{roleId,jdbcType=INTEGER},
+      moudle_id = #{moudleId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!-- 自定义SQL -->
+  <select id="selectByRoleId2" parameterType="int" resultType="String">
+    select m.opt_value from t_role_moudle r,t_moudle m where m.id = r.moudle_id and r.role_id = #{roleId} and m.is_valid = 1
+  </select>
+  <select id="selectByRoleId" parameterType="int" resultType="int">
+    select moudle_id from t_role_moudle where role_id = #{roleId}
+  </select>
+  <select id="selectByCount" parameterType="int" resultType="int">
+    select count(*) from t_role_moudle where role_id = #{roleId}
+  </select>
+  <insert id="insertBatch">
+    insert into t_role_moudle(role_id,moudle_id) values
+    <foreach collection="list" item="arry" separator=",">
+      (#{arry.roleId},#{arry.moudleId})
+    </foreach>
+  </insert>
+  <delete id="deleteByRoleId" parameterType="int">
+     delete from t_role_moudle where role_id = #{roleId}
+  </delete>
+</mapper>

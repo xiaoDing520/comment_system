@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yjxxt.comment.mapper.UserSubjectMapper" >
+  <resultMap id="BaseResultMap" type="com.yjxxt.comment.bean.UserSubject" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <id column="sub_id" property="subId" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="com.yjxxt.comment.bean.UserSubject" >
+    delete from t_user_subject
+    where id = #{id,jdbcType=INTEGER}
+      and user_id = #{userId,jdbcType=INTEGER}
+      and sub_id = #{subId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yjxxt.comment.bean.UserSubject" >
+    insert into t_user_subject (id, user_id, sub_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{subId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yjxxt.comment.bean.UserSubject" >
+    insert into t_user_subject
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="subId != null" >
+        sub_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="subId != null" >
+        #{subId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+
+  <!-- 查询用户课程 -->
+  <select id="selectByUserId" parameterType="int" resultType="int">
+    select count(*) from t_user_subject where user_id = #{userId}
+  </select>
+
+  <!-- 根据课程id查询数量 -->
+  <select id="countUserSubByUserId" resultType="java.lang.Integer">
+    select count(*) from t_user_subject where sub_id=#{subId}
+  </select>
+
+  <!-- 用户添加课程 -->
+  <insert id="addUserSubject">
+    insert into t_user_subject(user_id,sub_id) values
+    <foreach collection="list" item="userSubject" separator=",">
+      (#{userSubject.userId},#{userSubject.subId})
+    </foreach>
+  </insert>
+
+  <!--删除-->
+  <delete id="deletUserSubByUserId">
+    delete from t_user_subject where sub_id=#{subId}
+  </delete>
+
+  <!-- 根据用户id删除 -->
+  <delete id="deleteByUserId" parameterType="int">
+    delete from t_user_subject where user_id = #{userId}
+  </delete>
+</mapper>

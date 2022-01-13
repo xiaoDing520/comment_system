@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yjxxt.comment.mapper.ScoreMapper" >
+  <resultMap id="BaseResultMap" type="com.yjxxt.comment.bean.Score" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="sub_id" property="subId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="manner" property="manner" jdbcType="DOUBLE" />
+    <result column="atmosphere" property="atmosphere" jdbcType="DOUBLE" />
+    <result column="quality" property="quality" jdbcType="DOUBLE" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="is_valid" property="isValid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sub_id, user_id, manner, atmosphere, quality, create_date, update_date, is_valid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_score
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_score
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yjxxt.comment.bean.Score" >
+    insert into t_score (id, sub_id, user_id, 
+      manner, atmosphere, quality, 
+      create_date, update_date, is_valid
+      )
+    values (#{id,jdbcType=INTEGER}, #{subId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{manner,jdbcType=DOUBLE}, #{atmosphere,jdbcType=DOUBLE}, #{quality,jdbcType=DOUBLE}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{isValid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yjxxt.comment.bean.Score" >
+    insert into t_score
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="subId != null" >
+        sub_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="manner != null" >
+        manner,
+      </if>
+      <if test="atmosphere != null" >
+        atmosphere,
+      </if>
+      <if test="quality != null" >
+        quality,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="isValid != null" >
+        is_valid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="subId != null" >
+        #{subId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="manner != null" >
+        #{manner,jdbcType=DOUBLE},
+      </if>
+      <if test="atmosphere != null" >
+        #{atmosphere,jdbcType=DOUBLE},
+      </if>
+      <if test="quality != null" >
+        #{quality,jdbcType=DOUBLE},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isValid != null" >
+        #{isValid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yjxxt.comment.bean.Score" >
+    update t_score
+    <set >
+      <if test="subId != null" >
+        sub_id = #{subId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="manner != null" >
+        manner = #{manner,jdbcType=DOUBLE},
+      </if>
+      <if test="atmosphere != null" >
+        atmosphere = #{atmosphere,jdbcType=DOUBLE},
+      </if>
+      <if test="quality != null" >
+        quality = #{quality,jdbcType=DOUBLE},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isValid != null" >
+        is_valid = #{isValid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yjxxt.comment.bean.Score" >
+    update t_score
+    set sub_id = #{subId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      manner = #{manner,jdbcType=DOUBLE},
+      atmosphere = #{atmosphere,jdbcType=DOUBLE},
+      quality = #{quality,jdbcType=DOUBLE},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      is_valid = #{isValid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <insert id="insertScore" parameterType="com.yjxxt.comment.bean.Score">
+    insert into t_score(id,sub_id,user_id,manner,atmosphere,quality) values (DEFAULT,#{subId},#{userId},#{manner},#{atmosphere},#{quality})
+  </insert>
+
+  <!--列表查询-->
+  <select id="selectScores" resultType="com.yjxxt.comment.bean.Score" parameterType="integer">
+    SELECT
+      user_name,
+      sub_name,
+      avg_manner,
+      avg_atmosphere,
+      avg_quality
+    FROM
+      (
+        SELECT
+          sub.sub_name,
+          AVG( sc.manner ) AS avg_manner,
+          AVG( sc.atmosphere ) AS avg_atmosphere,
+          AVG( sc.quality ) AS avg_quality,
+          us.user_name,
+          us.id
+        FROM
+          ( t_subject sub LEFT JOIN t_user us ON sub.user_id = us.id )
+            LEFT JOIN t_score sc ON sub.id = sc.sub_id
+        GROUP BY
+          sc.sub_id
+      ) AS s
+    WHERE
+      s.id = 9
+  </select>
+
+</mapper>
